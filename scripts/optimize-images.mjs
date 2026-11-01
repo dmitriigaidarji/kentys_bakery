@@ -50,25 +50,54 @@ await sharp(`${SRC}/photos/shopfront.jpg`)
   .jpeg({ quality: 82, mozjpeg: true })
   .toFile(`${PUB}/og-image.jpg`);
 
-// The logo artwork sits on a tall black canvas; crop the round badge.
-// Square centred on the badge (centre 512,716; outermost artwork 422px out) with a
-// little margin, so the banner corners survive the round mask.
-const badge = sharp(`${SRC}/brand/logo.png`).extract({ left: 52, top: 256, width: 920, height: 920 });
-const badgePng = await badge.png().toBuffer();
-const circle = (s) => Buffer.from(`<svg width="${s}" height="${s}"><circle cx="${s / 2}" cy="${s / 2}" r="${s / 2}"/></svg>`);
+// The logo artwork sits on a tall black canvas. Flood-fill the black (and the grey
+// glow) from the canvas edges to transparent; the white outline stops the fill, so
+// the black inside the badge stays. Then trim to the badge and centre it on a
+// transparent square.
+const { data: px, info } = await sharp(`${SRC}/brand/logo.png`).ensureAlpha().raw().toBuffer({ resolveWithObject: true });
+const { width: lw, height: lh } = info;
+const outside = new Uint8Array(lw * lh);
+const stack = [];
+for (let x = 0; x < lw; x++) stack.push(x, (lh - 1) * lw + x);
+for (let y = 0; y < lh; y++) stack.push(y * lw, y * lw + lw - 1);
+while (stack.length) {
+  const i = stack.pop();
+  if (outside[i]) continue;
+  const o = i * 4;
+  if (px[o] * 0.299 + px[o + 1] * 0.587 + px[o + 2] * 0.114 > 200) continue;
+  outside[i] = 1;
+  const x = i % lw;
+  if (x > 0) stack.push(i - 1);
+  if (x < lw - 1) stack.push(i + 1);
+  if (i >= lw) stack.push(i - lw);
+  if (i < lw * (lh - 1)) stack.push(i + lw);
+}
+for (let i = 0; i < outside.length; i++) if (outside[i]) px[i * 4 + 3] = 0;
+const cutout = await sharp(px, { raw: info }).png().toBuffer();
+const trimmed = await sharp(cutout).trim().png().toBuffer({ resolveWithObject: true });
+const side = Math.max(trimmed.info.width, trimmed.info.height) + 16;
+const clear = { r: 0, g: 0, b: 0, alpha: 0 };
+const badgePng = await sharp(trimmed.data)
+  .extend({
+    top: Math.floor((side - trimmed.info.height) / 2), bottom: Math.ceil((side - trimmed.info.height) / 2),
+    left: Math.floor((side - trimmed.info.width) / 2), right: Math.ceil((side - trimmed.info.width) / 2),
+    background: clear,
+  })
+  .png().toBuffer();
 
 for (const s of [96, 192]) {
   await sharp(badgePng).resize(s, s).webp({ quality: 85 }).toFile(`${OUT}/logo-${s}.webp`);
 }
-// Square icons keep the black ground (home-screen and manifest icons get masked by the OS).
+// Home-screen and manifest icons get an opaque cream ground (the OS masks them).
 for (const s of [180, 192, 512]) {
-  await sharp(badgePng).resize(s, s).png().toFile(`${PUB}/icons/icon-${s}.png`);
+  await sharp(badgePng).resize(Math.round(s * 0.84), Math.round(s * 0.84))
+    .extend({ top: Math.round(s * 0.08), bottom: s - Math.round(s * 0.84) - Math.round(s * 0.08), left: Math.round(s * 0.08), right: s - Math.round(s * 0.84) - Math.round(s * 0.08), background: '#f5ead8' })
+    .flatten({ background: '#f5ead8' })
+    .png().toFile(`${PUB}/icons/icon-${s}.png`);
 }
-// Browser-tab favicon: round, transparent corners.
+// Browser-tab favicon: the badge on a transparent ground.
 for (const s of [32, 48]) {
-  await sharp(badgePng).resize(s, s)
-    .composite([{ input: circle(s), blend: 'dest-in' }])
-    .png().toFile(`${PUB}/icons/favicon-${s}.png`);
+  await sharp(badgePng).resize(s, s).png().toFile(`${PUB}/icons/favicon-${s}.png`);
 }
 
 console.log('Images written to', OUT, 'and', PUB);
