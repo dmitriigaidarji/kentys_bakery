@@ -51,7 +51,9 @@ await sharp(`${SRC}/photos/shopfront.jpg`)
   .toFile(`${PUB}/og-image.jpg`);
 
 // The logo artwork sits on a tall black canvas; crop the round badge.
-const badge = sharp(`${SRC}/brand/logo.png`).extract({ left: 72, top: 330, width: 880, height: 880 });
+// Square centred on the badge (centre 512,716; outermost artwork 422px out) with a
+// little margin, so the banner corners survive the round mask.
+const badge = sharp(`${SRC}/brand/logo.png`).extract({ left: 52, top: 256, width: 920, height: 920 });
 const badgePng = await badge.png().toBuffer();
 const circle = (s) => Buffer.from(`<svg width="${s}" height="${s}"><circle cx="${s / 2}" cy="${s / 2}" r="${s / 2}"/></svg>`);
 
