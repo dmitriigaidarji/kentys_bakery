@@ -11,12 +11,17 @@ const PUB = 'public';
 // name → source file, output aspect ratio (w/h) and the widths to emit;
 // `extract` pre-crops the source when the automatic crop misses the subject.
 const photos = {
-  'hero':            { src: 'photos/pie-warmer.jpg',      ratio: 4 / 5, widths: [600, 900, 1200] },
-  'pies':            { src: 'photos/pie.jpg',             ratio: 1,     widths: [400, 800], extract: { left: 0, top: 150, width: 900, height: 900 } },
-  'savoury':         { src: 'photos/savoury-cabinet.jpg', ratio: 1,     widths: [400, 800], position: 'attention' },
+  'hero':            { src: 'photos/pie-cabinet.webp',    ratio: 4 / 5, widths: [600, 900, 1200] },
+  'pies':            { src: 'photos/pie-cabinet.webp',    ratio: 1,     widths: [400, 800], extract: { left: 1050, top: 600, width: 900, height: 900 } },
+  'savoury':         { src: 'photos/pie-cabinet.webp',    ratio: 1,     widths: [400, 800], extract: { left: 380, top: 300, width: 900, height: 900 } },
   'treats':          { src: 'photos/cupcakes.jpg',        ratio: 1,     widths: [400, 526] },
   'dining':          { src: 'photos/dining.jpg',          ratio: 1,     widths: [400, 800] },
-  'bread':           { src: 'photos/bread-shelves.png',   ratio: 1,     widths: [400, 763], position: 'left' },
+  'loaves':          { src: 'photos/loaves.webp',         ratio: 1,     widths: [400, 800], extract: { left: 1150, top: 560, width: 850, height: 850 } },
+  'rolls':           { src: 'photos/rolls.webp',          ratio: 1,     widths: [400, 800], position: 'top' },
+  'scrolls':         { src: 'photos/scrolls.webp',        ratio: 1,     widths: [400, 800], extract: { left: 0, top: 330, width: 1350, height: 1350 } },
+  'pizza-breads':    { src: 'photos/pizza-breads.webp',   ratio: 1,     widths: [400, 800], position: 'bottom' },
+  'cheese-tops':     { src: 'photos/cheese-tops.webp',    ratio: 1,     widths: [400, 800], extract: { left: 0, top: 260, width: 1500, height: 1500 } },
+  'croissants':      { src: 'photos/croissants.webp',     ratio: 1,     widths: [400, 800], extract: { left: 100, top: 250, width: 1350, height: 1350 } },
   'shopfront':       { src: 'photos/shopfront.jpg',       ratio: 1,     widths: [420, 720] },
   'shopfront-wide':  { src: 'photos/shopfront.jpg',       ratio: 16 / 9, widths: [800, 1280] },
   'counter':         { src: 'photos/counter.jpg',         ratio: 4 / 3, widths: [800, 1200] },
