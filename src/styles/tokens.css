@@ -3,8 +3,8 @@
   --color-bg: #ffffff;
   --color-surface: #f2f2f2;
   --color-text: #111111;
-  --color-accent: #c67139;
-  --color-accent-2: #7a8a5e;
+  --color-accent: #111111;
+  --color-accent-2: #111111;
   --color-divider: color-mix(in srgb, #111111 16%, transparent);
 
   /* Tonal ramps — generated in OKLCH on one shared lightness scale, so the
@@ -19,25 +19,26 @@
   --color-neutral-800: #404040;
   --color-neutral-900: #262626;
 
-  --color-accent-100: #fff2eb;
-  --color-accent-200: #ffe1d0;
-  --color-accent-300: #ffc6a5;
-  --color-accent-400: #f6a06b;
-  --color-accent-500: #d67f48;
-  --color-accent-600: #b2622d;
-  --color-accent-700: #8c491a;
-  --color-accent-800: #643312;
-  --color-accent-900: #402310;
+  /* Black-and-white theme: both accent ramps are greyscale, ending in black. */
+  --color-accent-100: #f7f7f7;
+  --color-accent-200: #ebebeb;
+  --color-accent-300: #d6d6d6;
+  --color-accent-400: #b8b8b8;
+  --color-accent-500: #999999;
+  --color-accent-600: #333333;
+  --color-accent-700: #111111;
+  --color-accent-800: #000000;
+  --color-accent-900: #000000;
 
-  --color-accent-2-100: #f0fae1;
-  --color-accent-2-200: #e1eecc;
-  --color-accent-2-300: #ccdbb2;
-  --color-accent-2-400: #aebf92;
-  --color-accent-2-500: #8fa073;
-  --color-accent-2-600: #728157;
-  --color-accent-2-700: #56633f;
-  --color-accent-2-800: #3d472b;
-  --color-accent-2-900: #272e1b;
+  --color-accent-2-100: #f2f2f2;
+  --color-accent-2-200: #e6e6e6;
+  --color-accent-2-300: #cccccc;
+  --color-accent-2-400: #b3b3b3;
+  --color-accent-2-500: #8c8c8c;
+  --color-accent-2-600: #6b6b6b;
+  --color-accent-2-700: #4d4d4d;
+  --color-accent-2-800: #333333;
+  --color-accent-2-900: #1a1a1a;
 
   --font-heading: "Caprasimo", system-ui, sans-serif;
   --font-heading-weight: 400;
