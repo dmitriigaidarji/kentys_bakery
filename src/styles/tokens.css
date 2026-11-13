@@ -69,7 +69,6 @@ body {
 }
 h1, h2, h3, h4 { font-family: var(--font-heading); font-weight: var(--font-heading-weight); }
 
-.washed{filter:saturate(0.6) contrast(0.85) brightness(1.1) opacity(0.94)}
 
 /* ══════════════════════════════════════════════════════════════════════════
    Components — built with the tokens above. Plain CSS
